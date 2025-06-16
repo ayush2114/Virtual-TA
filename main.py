@@ -110,6 +110,17 @@ async def answer(request: QuestionRequest):
         print(f"DEBUG: Error occurred: {type(e).__name__}: {str(e)}")
         return {"error": f"An error occurred: {str(e)}"}
 
+@app.get("/")
+async def root():
+    """
+    Root endpoint to check if the server is running.
+    
+    Returns:
+        Dict[str, str]: A simple message indicating the server is running.
+    """
+    print("DEBUG: Root endpoint called")
+    return {"message": "Server is running. Use POST /api to ask questions."}
+
 if __name__ == "__main__":
     import uvicorn
     print("DEBUG: Starting FastAPI server on port 8000...")
