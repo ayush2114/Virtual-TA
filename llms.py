@@ -128,6 +128,7 @@ class Nomic:
             "texts": [text]
         }
         response = requests.post(self.url, headers=self.headers, json=payload)
+        print(f"[DEBUG] Nomic API response status code: {response.status_code}")
         return response.json()['embeddings'][0]
     
     def get_batch_embedding(self, texts: list) -> list:
