@@ -61,6 +61,12 @@ tools = [{
     }
 }]
 
+image_prompt = (
+    "You are a visual assistant. Given an image, describe its content clearly and concisely in 2–3 plain English sentences. "
+    "Focus on identifying the scene, objects, actions, or any relevant text. Do not speculate or make assumptions. "
+    "Your response should help someone understand what the image shows without seeing it."
+)
+
 load_dotenv()
 
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
@@ -83,7 +89,7 @@ def get_image_description(image: str) -> str:
     payload = {
         "model": OPENROUTER_MODEL,
         "messages": [
-            {"role": "user", "content": [{"type": "text", "text": "Please provide a detailed description of what this image contains."},{"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image}"}}]}
+            {"role": "user", "content": [{"type": "text", "text": image_prompt},{"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image}"}}]}
         ]
     }
     response = requests.post(OPENROUTER_URL, headers=OPENROUTER_HEADERS, json=payload)
