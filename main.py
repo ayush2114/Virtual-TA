@@ -141,6 +141,7 @@ import numpy as np
 import os
 import base64
 from llms import Nomic, OpenRouter, Ollama
+import json
 
 print("DEBUG: Initializing FastAPI app...")
 app = FastAPI()
@@ -240,6 +241,7 @@ async def answer(request: QuestionRequest):
     try:
         response = answer_question(request.question, request.image)
         print("DEBUG: Successfully generated response")
+        response = json.loads(response) 
         return response
     except Exception as e:
         print(f"DEBUG: Error occurred: {type(e).__name__}: {str(e)}")
