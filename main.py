@@ -38,6 +38,9 @@ def load_embeddings():
     print(f"DEBUG: Embedding shape: {embeddings.shape}")
     return chunks, embeddings
 
+chunks, embeddings = load_embeddings()
+embedding_norms = np.linalg.norm(embeddings, axis=1)
+
 def answer_question(question: str, image: str = None) -> Dict[str, str]:
     """
     Process the question and image to generate an answer.
@@ -61,13 +64,12 @@ def answer_question(question: str, image: str = None) -> Dict[str, str]:
     
     print("DEBUG: Getting question embedding...")
     question_embedding = nomic.get_embedding(question)
+    question_norm = np.linalg.norm(question_embedding)
     print(f"DEBUG: Question embedding shape: {len(question_embedding)}")
     
-    print("DEBUG: Loading embeddings...")
-    chunks, embeddings = load_embeddings()
     
     print("DEBUG: Calculating similarities...")
-    similarities = np.dot(embeddings, question_embedding) / (np.linalg.norm(embeddings, axis=1) * np.linalg.norm(question_embedding))
+    similarities = np.dot(embeddings, question_embedding) / (embedding_norms * question_norm)
     print(f"DEBUG: Similarities shape: {similarities.shape}")
     print(f"DEBUG: Max similarity: {np.max(similarities):.4f}, Min similarity: {np.min(similarities):.4f}")
     
