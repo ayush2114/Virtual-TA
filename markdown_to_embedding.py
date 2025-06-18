@@ -25,7 +25,7 @@ def get_chunks_from_markdown(file_path: Path, chunk_size: int = 2048) -> list:
 
 
 if __name__ == "__main__":
-    files = [*Path("tds_pages_md").glob("*.md"), *Path("tds_pages_md").rglob("*.md")]
+    files = [*Path("tds_pages_md").glob("*.md"), *Path("discourse_md").glob("*.md")]
     all_chunks = []
     all_embeddings = []
     total_chunks = 0

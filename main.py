@@ -5,14 +5,15 @@ from typing import List, Dict
 import numpy as np
 import os
 import base64
-from llms import Nomic, OpenRouter, Ollama
+from llms import Nomic, OpenRouter, Ollama, OpenAI
+import json
 
 print("DEBUG: Initializing FastAPI app...")
 app = FastAPI()
 print("DEBUG: Creating Nomic instance...")
 nomic = Nomic()
-print("DEBUG: Creating OpenRouter client...")
-client = OpenRouter()
+print("DEBUG: Creating OpenAI client...")
+client = OpenAI()
 print("DEBUG: App initialization complete.")
 
 app.add_middleware(
@@ -70,10 +71,10 @@ def answer_question(question: str, image: str = None) -> Dict[str, str]:
     print(f"DEBUG: Similarities shape: {similarities.shape}")
     print(f"DEBUG: Max similarity: {np.max(similarities):.4f}, Min similarity: {np.min(similarities):.4f}")
     
-    top_indices = np.argsort(similarities)[-10:][::-1]
-    print(f"DEBUG: Top 10 similarity indices: {top_indices}")
-    print(f"DEBUG: Top 10 similarity scores: {[similarities[i] for i in top_indices]}")
-    
+    top_indices = np.argsort(similarities)[-5:][::-1]
+    print(f"DEBUG: Top 5 similarity indices: {top_indices}")
+    print(f"DEBUG: Top 5 similarity scores: {[similarities[i] for i in top_indices]}")
+
     top_chunks = [chunks[i] for i in top_indices]
     print(f"DEBUG: Retrieved {len(top_chunks)} top chunks")
     print(f"DEBUG: First chunk preview: '{top_chunks[0][:100]}{'...' if len(top_chunks[0]) > 100 else ''}'" if top_chunks else "DEBUG: No chunks retrieved")
@@ -105,6 +106,7 @@ async def answer(request: QuestionRequest):
     try:
         response = answer_question(request.question, request.image)
         print("DEBUG: Successfully generated response")
+        response = json.loads(response) 
         return response
     except Exception as e:
         print(f"DEBUG: Error occurred: {type(e).__name__}: {str(e)}")
