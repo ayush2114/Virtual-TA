@@ -9,3 +9,5 @@ tqdm
 google-genai
 beautifulsoup4
 pillow
+markdownify
+playwright
